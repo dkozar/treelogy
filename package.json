@@ -1,22 +1,29 @@
 {
   "name": "treelogy",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple versioning framework",
-  "main": "index.js",
+  "author": "Danko Kozar (http://github.com/dkozar)",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dkozar/treelogy.git"
   },
-  "author": "Danko Kozar",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dkozar/treelogy/issues"
   },
   "homepage": "https://github.com/dkozar/treelogy#readme",
+  "main": "./index.js",
   "dependencies": {
     "lodash": "^4.17.5"
   },
   "devDependencies": {
-    "prettier": "^1.11.1"
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "prettier": "^1.11.1",
+    "rimraf": "^2.6.1"
+  },
+  "scripts": {
+    "build": "rimraf build && babel --presets es2017 src --out-dir build"
   }
 }

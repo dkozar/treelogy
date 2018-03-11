@@ -1,8 +1,8 @@
-import Treelogy from "./src/treelogy/Treelogy";
-import Version from "./src/treelogy/Version";
-import Node from "./src/treelogy/Node";
-import serialize from "./src/treelogy/serialize";
-import deserialize from "./src/treelogy/deserialize";
+import Treelogy from "./build/Treelogy";
+import Version from "./build/Version";
+import Node from "./build/Node";
+import serialize from "./build/serialize";
+import deserialize from "./build/deserialize";
 
 export default Treelogy;
 export { Version, Node, serialize, deserialize };
