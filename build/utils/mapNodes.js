@@ -1,8 +1,13 @@
-const mapNodes = nodes => {
-  return nodes.reduce((map, node) => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var mapNodes = function mapNodes(nodes) {
+  return nodes.reduce(function (map, node) {
     map[node.id] = node;
     return map;
   }, {});
 };
 
-export default mapNodes;
+exports.default = mapNodes;

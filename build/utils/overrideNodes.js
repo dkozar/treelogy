@@ -1,4 +1,14 @@
-import mapNodes from "./mapNodes";
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _mapNodes = require("./mapNodes");
+
+var _mapNodes2 = _interopRequireDefault(_mapNodes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Merges an array of parent and child version nodes
@@ -6,17 +16,17 @@ import mapNodes from "./mapNodes";
  * @param childNodes
  * @returns {Array}
  */
-const overrideNodes = (parentNodes, childNodes) => {
-  const parentNodesIdMap = mapNodes(parentNodes);
-  const childNodesIdMap = mapNodes(childNodes);
-  const output = [];
+var overrideNodes = function overrideNodes(parentNodes, childNodes) {
+  var parentNodesIdMap = (0, _mapNodes2.default)(parentNodes);
+  var childNodesIdMap = (0, _mapNodes2.default)(childNodes);
+  var output = [];
 
   /**
    * 1. Process list of parent nodes first, minding overrides
    */
-  parentNodes.forEach(parentNode => {
-    const id = parentNode.id;
-    const childNode = childNodesIdMap[id];
+  parentNodes.forEach(function (parentNode) {
+    var id = parentNode.id;
+    var childNode = childNodesIdMap[id];
 
     // if child node exists, it overrides the parent node
     output.push(childNode || parentNode);
@@ -25,9 +35,9 @@ const overrideNodes = (parentNodes, childNodes) => {
   /**
    * 2. Process child nodes that do not exist in the parent
    */
-  childNodes.forEach(childNode => {
-    const id = childNode.id;
-    const parentNode = parentNodesIdMap[id];
+  childNodes.forEach(function (childNode) {
+    var id = childNode.id;
+    var parentNode = parentNodesIdMap[id];
 
     if (parentNode) {
       return;
@@ -39,4 +49,4 @@ const overrideNodes = (parentNodes, childNodes) => {
   return output;
 };
 
-export default overrideNodes;
+exports.default = overrideNodes;

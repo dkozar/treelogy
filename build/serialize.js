@@ -1,9 +1,17 @@
-import { pick } from "lodash";
+"use strict";
 
-const serializeVersion = version => {
-  const parent = version.parent;
-  const nodes = version.nodes.map(node => pick(node, ["id", "data"]));
-  const output = {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _lodash = require("lodash");
+
+var serializeVersion = function serializeVersion(version) {
+  var parent = version.parent;
+  var nodes = version.nodes.map(function (node) {
+    return (0, _lodash.pick)(node, ["id", "data"]);
+  });
+  var output = {
     id: version.id
   };
 
@@ -18,10 +26,12 @@ const serializeVersion = version => {
   return output;
 };
 
-const serialize = treelogy => {
-  const versions = treelogy.versions.map(version => serializeVersion(version));
+var serialize = function serialize(treelogy) {
+  var versions = treelogy.versions.map(function (version) {
+    return serializeVersion(version);
+  });
 
-  return { versions };
+  return { versions: versions };
 };
 
-export default serialize;
+exports.default = serialize;

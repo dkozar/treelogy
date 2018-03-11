@@ -1,57 +1,78 @@
-import { intersection } from "lodash";
-import overrideNodes from "./utils/overrideNodes";
-import Node from "./Node";
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _lodash = require("lodash");
+
+var _overrideNodes = require("./utils/overrideNodes");
+
+var _overrideNodes2 = _interopRequireDefault(_overrideNodes);
+
+var _Node = require("./Node");
+
+var _Node2 = _interopRequireDefault(_Node);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * Version represents a set of nodes
  * Each of the nodes could be individually overridden (by version inheriting from this version)
  */
-export default class Version {
+var Version = function () {
+  function Version(id) {
+    var _this = this;
 
-  constructor(id) {
+    _classCallCheck(this, Version);
+
     this.id = null;
     this.childVersions = [];
     this.parent = null;
     this.nodes = [];
 
-    this.inherits = parent => {
-      this.parent = parent;
+    this.inherits = function (parent) {
+      _this.parent = parent;
 
       if (parent) {
-        this.parent.childVersions.push(this);
+        _this.parent.childVersions.push(_this);
       }
     };
 
-    this.createNode = (nodeId, data) => {
-      this.nodes.push(new Node(nodeId, data));
+    this.createNode = function (nodeId, data) {
+      _this.nodes.push(new _Node2.default(nodeId, data));
     };
 
-    this.getNode = nodeId => {
-      return this.nodes.find(node => {
+    this.getNode = function (nodeId) {
+      return _this.nodes.find(function (node) {
         return node && node.id === nodeId;
       });
     };
 
-    this.getNodeIndex = nodeId => {
-      return this.nodes.findIndex(node => {
+    this.getNodeIndex = function (nodeId) {
+      return _this.nodes.findIndex(function (node) {
         return node && node.id === nodeId;
       });
     };
 
-    this.updateNode = (nodeId, data) => {
-      const nodeInThisVersion = this.getNode(nodeId);
+    this.updateNode = function (nodeId, data) {
+      var nodeInThisVersion = _this.getNode(nodeId);
 
       if (nodeInThisVersion) {
         nodeInThisVersion.update(data);
       } else {
-        this.createNode(nodeId, data);
+        _this.createNode(nodeId, data);
       }
     };
 
-    this.removeNode = nodeId => {
-      const index = this.getNodeIndex(nodeId);
+    this.removeNode = function (nodeId) {
+      var index = _this.getNodeIndex(nodeId);
 
-      this.nodes.splice(index, 1);
+      _this.nodes.splice(index, 1);
     };
 
     if (!id) {
@@ -100,122 +121,148 @@ export default class Version {
    */
 
 
-  /**
-   * Tries to find an ancestor node with ID
-   * @param id Node ID
-   */
-  findClosestAncestorsNodeWithId(id) {
-    let current = this;
+  _createClass(Version, [{
+    key: "findClosestAncestorsNodeWithId",
 
-    while (current.parent) {
-      const parent = current.parent;
-      const node = parent.getNode(id);
 
-      current = parent;
+    /**
+     * Tries to find an ancestor node with ID
+     * @param id Node ID
+     */
+    value: function findClosestAncestorsNodeWithId(id) {
+      var current = this;
 
-      if (node) {
-        return node;
-      }
-    }
-  }
+      while (current.parent) {
+        var parent = current.parent;
+        var node = parent.getNode(id);
 
-  /**
-   * Gets all ancestor nodes with ID
-   * @param id Node ID
-   */
-  findAllAncestorNodesWithId(id) {
-    const nodes = [];
-    let current = this;
+        current = parent;
 
-    while (current.parent) {
-      const parent = current.parent;
-      const node = parent.getNode(id);
-
-      current = parent;
-
-      if (node) {
-        nodes.push(node);
+        if (node) {
+          return node;
+        }
       }
     }
 
-    return nodes;
-  }
+    /**
+     * Gets all ancestor nodes with ID
+     * @param id Node ID
+     */
 
-  /**
-   * Gets the parent chain of versions from which this version inherits from
-   * @returns {Array}
-   */
-  getParentChain() {
-    let parentChain = [];
-    let current = this;
+  }, {
+    key: "findAllAncestorNodesWithId",
+    value: function findAllAncestorNodesWithId(id) {
+      var nodes = [];
+      var current = this;
 
-    while (current.parent) {
-      const parent = current.parent;
-      parentChain = [].concat(parent, parentChain);
+      while (current.parent) {
+        var parent = current.parent;
+        var node = parent.getNode(id);
 
-      current = parent;
+        current = parent;
+
+        if (node) {
+          nodes.push(node);
+        }
+      }
+
+      return nodes;
     }
 
-    return parentChain;
-  }
+    /**
+     * Gets the parent chain of versions from which this version inherits from
+     * @returns {Array}
+     */
 
-  /**
-   * Destroys the node, taking care of connecting its parent to its children
-   */
-  destroy() {
-    const parent = this.parent;
-    const childVersions = this.childVersions;
+  }, {
+    key: "getParentChain",
+    value: function getParentChain() {
+      var parentChain = [];
+      var current = this;
 
-    this.parent = null;
-    this.childVersions = [];
+      while (current.parent) {
+        var parent = current.parent;
+        parentChain = [].concat(parent, parentChain);
 
-    if (parent) {
-      parent.childVersions = [];
+        current = parent;
+      }
+
+      return parentChain;
     }
 
-    childVersions.forEach(childVersion => {
-      childVersion.inherits(parent);
-    });
-  }
+    /**
+     * Destroys the node, taking care of connecting its parent to its children
+     */
 
-  /**
-   * Builds an array of nodes, set of inherited IDs and set of overridden IDs
-   * @returns {{id: Version.id, nodes: Array, inherited: {}, overrides: {}}}
-   */
-  build() {
-    const { id } = this;
-    // array of nodes
-    const nodes = this.nodes;
-    // a map of [nodeId, true]
-    const overrides = {};
-    const inherited = {};
-    const idsInThisVersion = nodes.map(node => node.id);
-    let output = overrideNodes([], nodes);
-    let current = this;
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      var parent = this.parent;
+      var childVersions = this.childVersions;
 
-    while (current.parent) {
-      const parent = current.parent;
-      const parentNodes = parent.nodes;
-      const idsInParentVersion = parentNodes.map(node => node.id);
-      const common = intersection(idsInThisVersion, idsInParentVersion);
+      this.parent = null;
+      this.childVersions = [];
 
-      idsInParentVersion.forEach(id => {
-        inherited[id] = true;
+      if (parent) {
+        parent.childVersions = [];
+      }
+
+      childVersions.forEach(function (childVersion) {
+        childVersion.inherits(parent);
       });
-
-      common.forEach(id => {
-        overrides[id] = true;
-      });
-
-      output = overrideNodes(parentNodes, output);
-      current = parent;
     }
 
-    return {
-      id,
-      nodes: output,
-      inherited,
-      overrides
-    };
-  }
-}
+    /**
+     * Builds an array of nodes, set of inherited IDs and set of overridden IDs
+     * @returns {{id: Version.id, nodes: Array, inherited: {}, overrides: {}}}
+     */
+
+  }, {
+    key: "build",
+    value: function build() {
+      var id = this.id;
+      // array of nodes
+
+      var nodes = this.nodes;
+      // a map of [nodeId, true]
+      var overrides = {};
+      var inherited = {};
+      var idsInThisVersion = nodes.map(function (node) {
+        return node.id;
+      });
+      var output = (0, _overrideNodes2.default)([], nodes);
+      var current = this;
+
+      while (current.parent) {
+        var parent = current.parent;
+        var parentNodes = parent.nodes;
+        var idsInParentVersion = parentNodes.map(function (node) {
+          return node.id;
+        });
+        var common = (0, _lodash.intersection)(idsInThisVersion, idsInParentVersion);
+
+        idsInParentVersion.forEach(function (id) {
+          inherited[id] = true;
+        });
+
+        common.forEach(function (id) {
+          overrides[id] = true;
+        });
+
+        output = (0, _overrideNodes2.default)(parentNodes, output);
+        current = parent;
+      }
+
+      return {
+        id: id,
+        nodes: output,
+        inherited: inherited,
+        overrides: overrides
+      };
+    }
+  }]);
+
+  return Version;
+}();
+
+exports.default = Version;
