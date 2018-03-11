@@ -1,11 +1,8 @@
 {
   "name": "treelogy",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "A simple versioning framework",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dkozar/treelogy.git"
@@ -15,5 +12,11 @@
   "bugs": {
     "url": "https://github.com/dkozar/treelogy/issues"
   },
-  "homepage": "https://github.com/dkozar/treelogy#readme"
+  "homepage": "https://github.com/dkozar/treelogy#readme",
+  "dependencies": {
+    "lodash": "^4.17.5"
+  },
+  "devDependencies": {
+    "prettier": "^1.11.1"
+  }
 }
