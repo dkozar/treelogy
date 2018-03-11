@@ -82,4 +82,10 @@ const demo = () => {
 };
 ```
 
+## Installation
+
+```
+yarn add treelogy --save
+```
+
 Check the [treelogy-demo](https://github.com/dkozar/treelogy-demo) project for online examples.
